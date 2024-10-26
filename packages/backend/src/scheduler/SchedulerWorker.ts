@@ -241,6 +241,9 @@ export class SchedulerWorker extends SchedulerTask {
                 payload: any,
                 helpers: JobHelpers,
             ) => {
+                console.log('inside send notify email');
+                console.log(payload);
+                
                 await tryJobOrTimeout(
                     SchedulerClient.processJob(
                         'sendEmailNotification',

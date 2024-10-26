@@ -55,6 +55,7 @@ import {
 import { ChartSchedulersModal } from '../../../features/scheduler';
 import {
     getSchedulerUuidFromUrlParams,
+    getThresholdUuidFromUrlParams,
     isSchedulerTypeSync,
 } from '../../../features/scheduler/utils';
 import { SyncModal as GoogleSheetsSyncModal } from '../../../features/sync/components';
@@ -216,6 +217,13 @@ const SavedChartsHeader: FC<SavedChartsHeaderProps> = ({
     );
 
     const itemsMap = useMemo(() => {
+        console.log('resultsData');
+        console.log(resultsData);
+        // console.log('isScheduledDeliveriesModalOpen');
+        // console.log(isScheduledDeliveriesModalOpen);
+        // console.log('isThresholdAlertsModalOpen');
+        // console.log(isThresholdAlertsModalOpen);
+        
         return resultsData?.fields;
     }, [resultsData]);
 
@@ -269,6 +277,16 @@ const SavedChartsHeader: FC<SavedChartsHeaderProps> = ({
                 syncWithGoogleSheetsModalHandlers.open();
             } else {
                 scheduledDeliveriesModalHandlers.open();
+            }
+        }
+        
+        const threshholdUuidFromUrlParams = getThresholdUuidFromUrlParams(search);
+
+        if(threshholdUuidFromUrlParams){
+            if (isSync) {
+                syncWithGoogleSheetsModalHandlers.open();
+            } else {
+                thresholdAlertsModalHandlers.open();
             }
         }
     }, [

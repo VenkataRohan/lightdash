@@ -95,6 +95,8 @@ const Schedulers: FC<SchedulersProps> = ({
                                 return 'Google Sheets';
                         }
                     };
+                    console.log('scheduler View');
+                    
                     return (
                         <Group noWrap>
                             {getSchedulerIcon(item, theme)}

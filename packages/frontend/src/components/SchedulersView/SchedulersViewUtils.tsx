@@ -108,6 +108,10 @@ export const getLogStatusIcon = (log: Log, theme: MantineTheme) => {
 };
 
 export const getSchedulerLink = (item: SchedulerItem, projectUuid: string) => {
+    console.log('getSchedulerLink');
+    console.log(item);
+    
+    
     return item.savedChartUuid
         ? `/projects/${projectUuid}/saved/${
               item.savedChartUuid

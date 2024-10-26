@@ -53,7 +53,12 @@ export const ChartSchedulersModal: FC<ChartSchedulersProps> = ({
 }) => {
     const chartSchedulersQuery = useChartSchedulers(chartUuid);
     const createMutation = useChartSchedulerCreateMutation();
-
+    chartSchedulersQuery
+    console.log('chartSchedulersQuery');
+    console.log(chartSchedulersQuery);
+    console.log('modalProps');
+    console.log(modalProps);
+    
     return (
         <SchedulerModal
             resourceUuid={chartUuid}

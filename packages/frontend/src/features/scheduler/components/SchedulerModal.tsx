@@ -24,6 +24,10 @@ const SchedulersModal: FC<
     itemsMap,
     onClose = () => {},
 }) => {
+    console.log('isOpen');
+    console.log(isOpen);
+    
+    // isThresholdAlert = true
     return (
         <Modal
             opened={isOpen}

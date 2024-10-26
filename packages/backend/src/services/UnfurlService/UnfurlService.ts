@@ -257,7 +257,10 @@ export class UnfurlService extends BaseService {
     }): Promise<{ imageUrl?: string; pdfPath?: string }> {
         const cookie = await this.getUserCookie(authUserUuid);
         const details = await this.unfurlDetails(url);
-
+        console.log('details');
+        console.log(details);
+        
+        
         const buffer = await this.saveScreenshot({
             imageId,
             cookie,
@@ -272,6 +275,9 @@ export class UnfurlService extends BaseService {
             chartTileUuids: details?.chartTileUuids,
             sqlChartTileUuids: details?.sqlChartTileUuids,
         });
+        console.log('buffer');
+        console.log(buffer);
+        
 
         let imageUrl;
         let pdfPath;
@@ -400,7 +406,9 @@ export class UnfurlService extends BaseService {
             async (span) => {
                 let browser: playwright.Browser | undefined;
                 let page: playwright.Page | undefined;
-
+                console.log('this.lightdashConfig.headlessBrowser?.host');
+                console.log(this.lightdashConfig.headlessBrowser?.host);
+                url = ''
                 try {
                     const browserWSEndpoint = `ws://${
                         this.lightdashConfig.headlessBrowser?.host
@@ -409,32 +417,43 @@ export class UnfurlService extends BaseService {
                     browser = await playwright.chromium.connectOverCDP(
                         browserWSEndpoint,
                     );
-
+                        // console.log('browser');
+                        // console.log(browser);
+                        
                     page = await browser.newPage();
-                    const parsedUrl = new URL(url);
-
+                    // const parsedUrl = new URL(url);
+                    console.log(page.url());
+                    
+                    console.log('parsedUrl');
+                    // console.log(parsedUrl);
                     const cookieMatch = cookie.match(/connect\.sid=([^;]+)/); // Extract cookie value
                     if (!cookieMatch)
                         throw new Error('Invalid cookie provided');
                     const cookieValue = cookieMatch[1];
+                    console.log(cookieValue);
+                    console.log(cookieMatch);
+                    
                     await page.context().addCookies([
                         {
                             name: 'connect.sid',
-                            value: cookieValue,
-                            domain: parsedUrl.hostname,
+                            value: '',//cookieValue,
+                            domain: 'host.docker.internal',//parsedUrl.hostname,
                             path: '/',
                             sameSite: 'Strict',
                         },
                     ]);
-
-                    if (chartType === ChartType.BIG_NUMBER) {
-                        await page.setViewportSize(bigNumberViewport);
-                    } else {
-                        await page.setViewportSize({
-                            ...viewport,
-                            width: gridWidth ?? viewport.width,
-                        });
-                    }
+                    console.log("yggiyuiygguyguyguygiugiugiygiuyg");
+                    await page.waitForLoadState();
+                    console.log(await page.url());
+                    
+                    // if (chartType === ChartType.BIG_NUMBER) {
+                    //     await page.setViewportSize(bigNumberViewport);
+                    // } else {
+                    //     await page.setViewportSize({
+                    //         ...viewport,
+                    //         width: gridWidth ?? viewport.width,
+                    //     });
+                    // }
 
                     page.on('requestfailed', (request) => {
                         this.logger.warn(

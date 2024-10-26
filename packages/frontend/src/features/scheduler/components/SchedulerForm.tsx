@@ -260,6 +260,7 @@ const SchedulerForm: FC<Props> = ({
     isThresholdAlert,
     itemsMap,
 }) => {
+    // isThresholdAlert = true
     const isDashboard = resource && resource.type === 'dashboard';
     const isDashboardTabsEnabled = useFeatureFlagEnabled(
         FeatureFlags.DashboardTabs,
@@ -388,7 +389,9 @@ const SchedulerForm: FC<Props> = ({
     const [search, setSearch] = useState('');
 
     const debounceSetSearch = debounce((val) => setSearch(val), 500);
-
+        console.log('itemsMap');
+        console.log(itemsMap);
+        
     const numericMetrics = {
         ...getMetricsFromItemsMap(itemsMap ?? {}, isNumericItem),
         ...getTableCalculationsFromItemsMap(itemsMap),
@@ -438,15 +441,17 @@ const SchedulerForm: FC<Props> = ({
             form.validate();
         }
     }, [form, onSendNow]);
-
+    console.log(form);
+    
     const isAddSlackDisabled = disabled || slackState !== SlackStates.SUCCESS;
     const isAddEmailDisabled = disabled || !health.data?.hasEmailClient;
+    
     const isImageDisabled = !health.data?.hasHeadlessBrowser;
 
     const limit = form.values?.options?.limit;
 
-    const isThresholdAlertWithNoFields =
-        isThresholdAlert && Object.keys(numericMetrics).length === 0;
+    const isThresholdAlertWithNoFields = false
+        //isThresholdAlert && Object.keys(numericMetrics).length === 0;
 
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>

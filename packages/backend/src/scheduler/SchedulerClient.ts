@@ -426,7 +426,7 @@ export class SchedulerClient {
                     scheduler.schedulerUuid,
                 ),
             );
-
+                console.log("test")
             Logger.info(
                 `Creating ${promises.length} scheduled delivery jobs for scheduler ${scheduler.schedulerUuid}`,
             );

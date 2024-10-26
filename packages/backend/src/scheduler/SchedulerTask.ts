@@ -83,6 +83,7 @@ import { UserService } from '../services/UserService';
 import { ValidationService } from '../services/ValidationService/ValidationService';
 import { SchedulerClient } from './SchedulerClient';
 
+
 type SchedulerTaskArguments = {
     lightdashConfig: LightdashConfig;
     analytics: LightdashAnalytics;
@@ -172,7 +173,9 @@ export default class SchedulerTask {
                 );
             return {
                 url: `${this.lightdashConfig.siteUrl}/projects/${chart.projectUuid}/saved/${chartUuid}`,
+                // url: `http://localhost:3001/projects/${chart.projectUuid}/saved/${chartUuid}`,
                 minimalUrl: `${this.lightdashConfig.siteUrl}/minimal/projects/${chart.projectUuid}/saved/${chartUuid}?context=${context}`,
+                // minimalUrl: `http://localhost:3001/projects/minimal/projects/${chart.projectUuid}/saved/${chartUuid}?context=${context}`,
                 details: {
                     name: chart.name,
                     description: chart.description,
@@ -273,6 +276,10 @@ export default class SchedulerTask {
             context,
             selectedTabs,
         );
+        console.log(url);
+        console.log('url irfjue reiour pqweuro iqweruqp werupqw eiorupeqwoiru wepoiru ');
+        console.log(format);
+        
         switch (format) {
             case SchedulerFormat.IMAGE:
                 try {
@@ -282,6 +289,8 @@ export default class SchedulerTask {
                     )
                         ? scheduler.options
                         : undefined;
+                    console.log('above unfurlServe');
+                    
                     const unfurlImage = await this.unfurlService.unfurlImage({
                         url: minimalUrl,
                         lightdashPage: pageType,
@@ -294,6 +303,8 @@ export default class SchedulerTask {
                                 ? scheduler.customViewportWidth
                                 : undefined,
                     });
+                    console.log('below unfurlServe');
+                    console.log(unfurlImage);
                     if (unfurlImage.imageUrl === undefined) {
                         throw new Error('Unable to unfurl image');
                     }
@@ -312,7 +323,8 @@ export default class SchedulerTask {
                             },
                         );
                     }
-
+                    console.log("from error");
+                    
                     throw error;
                 }
                 break;
@@ -439,6 +451,8 @@ export default class SchedulerTask {
             scheduledTime,
             scheduler,
         } = notification;
+        console.log('send slack');
+        
         this.analytics.track({
             event: 'scheduler_notification_job.started',
             anonymousId: LightdashAnalytics.anonymousId,
@@ -511,6 +525,9 @@ export default class SchedulerTask {
             };
 
             if (thresholds !== undefined && thresholds.length > 0) {
+                console.log('thresholds jk;lj;klj ');
+            
+
                 // We assume the threshold is possitive , so we don't need to get results here
                 if (savedChartUuid) {
                     const blocks = getChartThresholdAlertBlocks({
@@ -1111,7 +1128,8 @@ export default class SchedulerTask {
             scheduledTime,
             scheduler,
         } = notification;
-
+        console.log("send Email notidicatrioln sdfj;asdfhasdlfh");
+        
         this.analytics.track({
             event: 'scheduler_notification_job.started',
             anonymousId: LightdashAnalytics.anonymousId,
@@ -1140,7 +1158,10 @@ export default class SchedulerTask {
                 targetType: 'email',
                 status: SchedulerJobStatus.STARTED,
             });
-
+            console.log(notification.page);
+            
+            console.log("emial ausidfh ausdhfiupasof ashdefbasdlfjhalurtypae rfhasdljfbh asdfh");
+            
             // Backwards compatibility for old scheduled deliveries
             const notificationPageData =
                 notification.page ??
@@ -1157,7 +1178,9 @@ export default class SchedulerTask {
             } = notificationPageData;
 
             const schedulerUrl = `${url}?scheduler_uuid=${schedulerUuid}`;
-
+            console.log('schedulerUrl');
+            console.log(schedulerUrl);
+            
             if (thresholds !== undefined && thresholds.length > 0) {
                 // We assume the threshold is possitive , so we don't need to get results here
                 if (imageUrl === undefined) {
@@ -1184,6 +1207,8 @@ export default class SchedulerTask {
                 }** triggered the following alerts:\n${thresholdMessageList.join(
                     '\n',
                 )}`;
+                console.log(details);
+                
                 await this.emailClient.sendImageNotificationEmail(
                     recipient,
                     `Lightdash Data Alert`,
@@ -1832,11 +1857,16 @@ export default class SchedulerTask {
                     );
                 }
             }
-
+            console.info('NoTIfying .. . .. . . . . ');
+            console.info(scheduler, jobId);
+            
             const page =
                 scheduler.format === SchedulerFormat.GSHEETS
                     ? undefined
                     : await this.getNotificationPageData(scheduler, jobId);
+                    console.info('page .. . .. . . . . ');
+                    console.info(page);
+                    
             const scheduledJobs =
                 await this.schedulerClient.generateJobsForSchedulerTargets(
                     scheduledTime,

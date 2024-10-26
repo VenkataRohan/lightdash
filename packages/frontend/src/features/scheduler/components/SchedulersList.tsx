@@ -21,9 +21,10 @@ const SchedulersList: FC<Props> = ({
     onEdit,
     isThresholdAlertList,
 }) => {
+    // isThresholdAlertList = true
     const { data: schedulers, isInitialLoading, error } = schedulersQuery;
     const [schedulerUuid, setSchedulerUuid] = useState<string>();
-
+    console.log(schedulers);
     const { deliverySchedulers, alertSchedulers } = (schedulers || []).reduce<{
         deliverySchedulers: SchedulerAndTargets[];
         alertSchedulers: SchedulerAndTargets[];

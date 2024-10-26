@@ -449,7 +449,9 @@ export const parseConfig = (): LightdashConfig => {
             `WARNING: Using ${siteUrl} as the base SITE_URL for Lightdash. This is not suitable for production. Update with a top-level domain using https such as https://lightdash.mycompany.com`,
         );
     }
-
+    console.log(process.env.EMAIL_SMTP_HOST);
+    console.log('process.env.EMAIL_SMTP_HOST d;akjsd 3234 12 sd asd asdasd');
+    
     return {
         mode,
         security: {

@@ -19,7 +19,7 @@ import { useTracking } from '../../../providers/TrackingProvider';
 import { EventName } from '../../../types/Events';
 import { useScheduler, useSendNowScheduler } from '../hooks/useScheduler';
 import { useSchedulersUpdateMutation } from '../hooks/useSchedulersUpdateMutation';
-import { getSchedulerUuidFromUrlParams } from '../utils';
+import { getSchedulerUuidFromUrlParams, getThresholdUuidFromUrlParams } from '../utils';
 import SchedulerForm from './SchedulerForm';
 import SchedulersModalFooter from './SchedulerModalFooter';
 import SchedulersList from './SchedulersList';
@@ -274,9 +274,14 @@ const SchedulerModalContent: FC<Omit<Props, 'name'>> = ({
 }) => {
     const [state, setState] = useState<States>(States.LIST);
     const [schedulerUuid, setSchedulerUuid] = useState<string | undefined>();
+    // const [thresholdAlert, setThresholdAlert] = useState<boolean | undefined>(isThresholdAlert);
     const history = useHistory();
     const { search, pathname } = useLocation();
-
+    console.log('search');
+    console.log(search);
+    console.log('pathname');
+    console.log(pathname);
+    
     useEffect(() => {
         const schedulerUuidFromUrlParams =
             getSchedulerUuidFromUrlParams(search);
@@ -285,15 +290,31 @@ const SchedulerModalContent: FC<Omit<Props, 'name'>> = ({
             setSchedulerUuid(schedulerUuidFromUrlParams);
 
             // remove from url param after modal is open
-            const newParams = new URLSearchParams(search);
+            const newParams = new URLSearchParams(search);       
             newParams.delete('scheduler_uuid');
             history.replace({
                 pathname,
                 search: newParams.toString(),
             });
+        }else{
+            const threshholdUuid = getThresholdUuidFromUrlParams(search);
+            if(threshholdUuid){
+                setState(States.EDIT);
+                setSchedulerUuid(threshholdUuid);
+    
+                // remove from url param after modal is open
+                const newParams = new URLSearchParams(search);
+                console.log('threshold');
+                console.log(isThresholdAlert);        
+                newParams.delete('threshold_uuid');
+                history.replace({
+                    pathname,
+                    search: newParams.toString(),
+                });
+            }
         }
     }, [history, pathname, search]);
-
+    
     return (
         <>
             {state === States.LIST && (
